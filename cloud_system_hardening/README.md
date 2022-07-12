@@ -1,0 +1,2 @@
+- KISA 클라우드 취약점 점검 가이드 기준으로 작성한 Playbook입니다.
+- Playbook은 실용성이 없으며 Ansible Playbook 작성 역량 향상을 위해 작성되었습니다.
