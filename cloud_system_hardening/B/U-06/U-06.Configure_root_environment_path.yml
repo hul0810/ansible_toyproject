@@ -1,0 +1,14 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - import_tasks: profile.yml
+    vars:
+      profile_path: /root/.profile
+    ignore_erros: yes
+
+  - import_tasks: profile.yml
+    vars:
+      profile_path: /etc/profile

@@ -1,0 +1,12 @@
+- name: U-10. check permission and owner /etc/hosts
+  stat:
+    path: /etc/hosts
+  register: stat
+
+- name: U-10. change permission and owner /etc/hosts
+  file:
+    path: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+  when: stat.stat.pw_name != 'root' or stat.stat.gr_name != 'root' or stat.stat.mode | int > 644

@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  become: yes
+  gather_facts: yes
+
+  tasks:
+  - name: Set account lock threshold in RHEL affiliation
+
+    block:
+    - name: 1. Settings system-auth (Console aceess)
+      pamd:
+        name: system-auth
+        type: account
+        control: required
+        module_path: pam_unix.so
+        new_type: account
+        new_control: required
+        new_module_path: pam_tally2.so
+        module_arguments: deny=5 no_magic_root
+        state: after
+      
+    - name: 2. Settings password-auth (SSH access)
+      pamd:
+        name: password-auth
+        type: auth
+        control: required
+        module_path: pam_env.so
+        new_type: auth
+        new_control: required
+        new_module_path: pam_tally2.so
+        module_arguments: deny=5 no_magic_root
+        state: after
+    when: ansible_distribution == "CentOS"
+        
+  - name: Set account lock threshold in Debian affiliation
+    pamd:
+      name: common-auth
+      type: auth
+      control: "[success=1 default=ignore]"
+      module_path: pam_unix.so
+      new_type: auth
+      new_control: required
+      new_module_path: pam_tally2.so
+      module_arguments: deny=5 no_magic_root
+      state: after
+    when: ansible_distribution == "Ubuntu" 

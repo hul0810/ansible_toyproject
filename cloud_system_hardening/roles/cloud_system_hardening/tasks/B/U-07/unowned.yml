@@ -1,0 +1,19 @@
+---
+- set_fact:
+    regex_pattern: "{{ path }}.*"
+
+- name: U-07. Check unowned file or directory
+  shell: find {{ path }} \( -nouser -o -nogroup \) -xdev -exec ls -al {} \; 2> /dev/null
+  register: result
+  changed_when: result.stdout != "" 
+- debug:
+    var: result.stdout_lines
+
+- name: U-07. Remove unowned file or directory
+  file:
+    path: "{{ item | regex_search(regex_pattern) }}"
+    state: absent
+  with_items: "{{ result.stdout_lines }}"
+  register: file
+- debug:
+    var: file.results | map(attribute='diff') | list

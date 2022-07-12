@@ -1,0 +1,21 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: check permission and owner /etc/rsyslog.conf
+    stat:
+      path: /etc/rsyslog.conf
+    register: stat
+
+  - name: change permission and owner /etc/rsyslog.conf
+    file:
+      path: /etc/rsyslog.conf
+      owner: root
+      group: root
+      mode: '0644'
+    when: stat.stat.pw_name != 'root' or stat.stat.gr_name != 'root' or stat.stat.mode | int > 644
+    register: file
+  - debug:
+      var: file.diff | default('No changes')

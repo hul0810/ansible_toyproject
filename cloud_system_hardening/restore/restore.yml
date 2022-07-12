@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+  - name: restore /etc/profile
+    replace:
+      path: /etc/profile
+      regexp: ^PATH.*
+      replace: ""
+

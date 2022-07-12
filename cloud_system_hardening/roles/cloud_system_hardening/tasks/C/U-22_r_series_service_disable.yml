@@ -1,0 +1,41 @@
+---
+- name: U22 r file check
+  shell: ls /etc/xinetd.d/ | grep ^r
+  register: result
+  ignore_errors: yes
+
+- block:
+  - name: U22 rlogin off
+    lineinfile:
+      path: /etc/xinetd.d/rlogin
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U22 rsh off
+    lineinfile:
+      path: /etc/xinetd.d/rsh
+      regexp: 'disable'
+      line: '        disable         = yes'
+    
+  - name: U22 rexec off
+    lineinfile:
+      path: /etc/xinetd.d/rexec
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: /etc/securetty r계열 삭제
+    lineinfile:
+      path: /etc/securetty
+      regexp: 'r'
+      state: absent
+  when: result.failed == false
+
+- name: r file doesn't exist
+  debug:
+    msg: r 파일 없음
+  when: result.failed == true
+
+- name: xinetd restart
+  service: 
+    name: xinetd
+    state: restarted

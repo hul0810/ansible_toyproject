@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: true
+
+  tasks:
+  - name: U-01. remove pts/x in /etc/securetty (remove telnet root remote access)
+    replace:
+      path: /etc/securetty
+      regexp: "(^pts.*)"
+      replace: "#\\1" 
+
+#    lineinfile:
+#      path: /etc/securetty
+#      regexp: "(^pts.*)"
+#      state: absent
+
+  - name: U-01. set PermitRootLogin no in /etc/ssh/sshd_config (remove ssh root remote access)
+    replace:
+      path: /etc/ssh/sshd_config
+      regexp: "^#*\\s*PermitRootLogin\\s*[a-zA-Z]*.*"
+      replace: "PermitRootLogin no"

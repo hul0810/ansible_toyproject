@@ -1,0 +1,26 @@
+---
+- name: finger (CentOS ver.)
+  block:
+    - name: finger delete
+      yum:
+        name: finger
+        state: absent
+      register: finger_centos
+      
+    - name: finger check
+      debug:
+        var: finger_centos.results
+  when: ansible_distribution == "CentOS"
+
+- name: finger (Ubuntu ver.)
+  block:
+    - name: finger delete
+      apt:
+        name: finger
+        state: absent
+      register: finger_ubuntu
+
+    - name: finger check
+      debug:
+        var: finger_ubuntu
+  when: ansible_distribution == "Ubuntu"

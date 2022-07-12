@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+  - name: check permission and owner /etc/shadow
+    stat:
+      path: /etc/shadow
+    register: stat
+
+  - name: change permission and owner /etc/shadow
+    file:
+      path: /etc/shadow
+      owner: root
+      group: root
+      mode: '0400'
+    when: stat.stat.pw_name != 'root' or stat.stat.gr_name != 'root' or stat.stat.mode != '0400'

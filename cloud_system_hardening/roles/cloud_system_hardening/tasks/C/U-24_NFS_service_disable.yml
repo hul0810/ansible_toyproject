@@ -1,0 +1,32 @@
+---
+- name: U24 nfs service
+  block:
+  - name: U24 nfs service stopped ( CentOS ver. )
+    systemd:
+      name: nfs
+      state: stopped
+    register: nfs_stop_centos
+    ignore_errors: yes
+
+  - name: debug
+    debug:
+      msg: "nfs stop"
+    when: nfs_stop_centos.state == 'stopped'
+
+  when: ansible_distribution == 'CentOS'
+
+- name: U24 nfs service
+  block:
+  - name: U24 nfs service stopped ( Ubuntu ver. )
+    service:
+      name: nfs-kernel-server
+      state: stopped
+    register: nfs_stop_ubuntu
+    ignore_errors: yes
+
+  - name: installed nfs
+    debug:
+      msg: "nfs stop"
+    when: nfs_stop_ubuntu.state == 'stopped'
+
+  when: ansible_distribution == 'Ubuntu'

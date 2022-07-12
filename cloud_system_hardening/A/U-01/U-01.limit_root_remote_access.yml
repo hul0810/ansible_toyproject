@@ -1,0 +1,46 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+  - name: 1. remove pts/x in /etc/securetty (remove telnet root remote access)
+    replace:
+      path: /etc/securetty
+      regexp: "(^pts.*)"
+      replace: "#\\1" 
+
+#    lineinfile:
+#      path: /etc/securetty
+#      regexp: "(^pts.*)"
+#      state: absent
+
+  - name: 2. set PermitRootLogin no in /etc/ssh/sshd_config (remove ssh root remote access)
+
+    block:
+    - name: case 1. already set PermitRootRogin no
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin [Nn]o.*"
+        replace: "PermitRootLogin no"
+      register: case1
+
+    - name: case 2. set PermitRootRogin yes
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin [yY]es"
+        replace: "PermitRootLogin no"
+      register: case2
+
+    - name: case 3. set comment PermitRootRogin
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: "^#\\s*PermitRootLogin.*"
+        replace: "PermitRootLogin no"
+      register: case3
+
+    - name: case 4. no settings anyting
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        insertafter: "^# Authentication:"
+        line: "PermitRootLogin no"
+      when: case1.changed == false and case2.changed == false and case3.changed == false

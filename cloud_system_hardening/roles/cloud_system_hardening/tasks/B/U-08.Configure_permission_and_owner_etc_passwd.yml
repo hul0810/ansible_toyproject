@@ -1,0 +1,13 @@
+- name: U-08. check permission and owner /etc/passwd
+  stat:
+    path: /etc/passwd
+  register: stat
+
+- name: U-08. change permission and owner /etc/passwd
+  file:
+    path: /etc/passwd
+    owner: root
+    group: root
+    mode: '0644'
+  when: stat.stat.pw_name != 'root' or stat.stat.gr_name != 'root' or stat.stat.mode != '0644'
+

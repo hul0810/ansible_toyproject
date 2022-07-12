@@ -1,0 +1,27 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks:
+  - name: install package in CentOS
+    block:
+    - yum:
+        name:
+        - xinetd
+        - autofs
+        - nfs-utils
+        state: present
+    when: ansible_distribution == 'CentOS'
+
+  - name: install package in Ubuntu
+    block:
+    - apt:
+        name: 
+        - xinetd
+        - autofs
+        - nfs-kernel-server
+        state: present
+    when: ansible_distribution == 'Ubuntu'
+
+

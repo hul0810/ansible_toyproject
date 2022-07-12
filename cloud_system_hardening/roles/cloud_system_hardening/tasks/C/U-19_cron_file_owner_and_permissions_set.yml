@@ -1,0 +1,19 @@
+- name: crontab mode check
+  stat:
+    path: /etc/crontab
+  register: result
+
+#- name: debug
+#  debug:
+#    var: result
+
+- name: already mode <= 644
+  debug:
+    msg: already mode <= 644
+  when: result.stat.mode | int <= 644
+
+- name: 
+  file:
+    path: /etc/crontab
+    mode: 0644
+  when: result.stat.mode | int > 644

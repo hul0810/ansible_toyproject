@@ -1,0 +1,23 @@
+- name: check "." in profile
+  command: grep PATH {{ profile_path }}
+  register: result
+  changed_when: "'.' in result.stdout"
+  failed_when: result.rc != 1
+- debug:
+    var: result.stdout
+
+- name: remove "." if "." exist in profile
+  block:
+  - shell: grep PATH {{ profile_path }} | tr -d '.' | tr -s ':/' 
+    register: remove
+  - debug:
+      var: remove.stdout
+
+  - replace:
+      path: "{{ profile_path }}"
+      regexp: PATH.*
+      replace: "{{ remove.stdout }}"
+    register: replace
+  - debug:
+      var: replace
+  when: "'.' in result.stdout" 

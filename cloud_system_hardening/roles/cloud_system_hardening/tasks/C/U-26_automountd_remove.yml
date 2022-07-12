@@ -1,0 +1,5 @@
+--- 
+- name: U26 autofs service stop
+  service:
+    name: autofs
+    state: stopped

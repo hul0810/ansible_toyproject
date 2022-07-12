@@ -1,0 +1,50 @@
+---
+- name: U-21 check
+  block:
+
+  - name: U-21. Anonymous FTP 비활성화
+    command: grep ftp /etc/passwd
+    register: result
+    ignore_errors: yes
+
+  - name: vsFTP check
+    command: ls /etc/vsftpd/vsftpd.conf
+    register: vs_result
+    ignore_errors: yes
+
+- name: U21 FTP 계정 확인
+  debug:
+    msg: "FTP계정 없음"
+  when: result.failed == true
+
+- name: U21 vsFTP 설치 확인
+  debug:
+    msg: "vsFTP 없음"
+  when: vs_result.failed == true
+
+
+- block:
+  - name: U21 vsFTP 설정 확인
+    command: grep 'anonymous_enable=YES' /etc/vsftpd/vsftpd.conf
+    register: file_check
+    ignore_errors: yes
+
+  - name: U21 vsFTP 안전한 경우
+    debug:
+      msg: vsFTP 안전
+    when: file_check.failed == true 
+
+  - name: U21 vsFTP 조치
+    lineinfile:
+      path: /etc/vsftpd/vsftpd.conf
+      regexp: 'anonymous_enable=YES'
+      line: 'anonymous_enable=NO'
+    when: file_check.failed == false
+  when: vs_result.failed == false
+
+- name: U21 ftp user 삭제
+  user:
+    name: ftp
+    state: absent
+    remove: yes
+  when: result.failed == false

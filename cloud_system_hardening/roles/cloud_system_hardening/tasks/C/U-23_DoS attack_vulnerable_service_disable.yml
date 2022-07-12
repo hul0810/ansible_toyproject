@@ -1,0 +1,54 @@
+---
+- block:
+  - name: U23 echo dgram off
+    lineinfile: 
+      path: /etc/xinetd.d/echo-dgram
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U23 echo stream off
+    lineinfile:
+      path: /etc/xinetd.d/echo-stream
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U23 discard dgram off
+    lineinfile:
+      path: /etc/xinetd.d/discard-dgram
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U23 discard stream off
+    lineinfile:
+      path: /etc/xinetd.d/discard-stream
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U23 daytime dgram off
+    lineinfile:
+      path: /etc/xinetd.d/daytime-dgram
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U23 daytime stream off
+    lineinfile:
+      path: /etc/xinetd.d/daytime-stream
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U23 chargen dgram off
+    lineinfile:
+      path: /etc/xinetd.d/chargen-dgram
+      regexp: 'disable'
+      line: '        disable         = yes'
+
+  - name: U23 chargen stream off
+    lineinfile:
+      path: /etc/xinetd.d/chargen-stream
+      regexp: 'disable'
+      line: 'disable         = yes'
+
+- name: xinetd restart
+  service:
+    name: xinetd
+    state: restarted

@@ -1,0 +1,25 @@
+---
+# A. Account Management
+- import_tasks: A/U-01.limit_root_remote_access.yml
+- import_tasks: A/U-02.Password_complexity_settings.yml
+- import_tasks: A/U-03.Set_account_lock_threshold.yml
+- import_tasks: A/U-04.Set_pass_max_days.yml
+- import_tasks: A/U-05.Password_file_protection.yml
+
+# B. File or Directory Management
+- import_tasks: B/U-06/U-06.Configure_root_environment_path.yml
+- import_tasks: B/U-07/U-07.Remove_unowned_file_or_directory.yml
+- import_tasks: B/U-08.Configure_permission_and_owner_etc_passwd.yml
+- import_tasks: B/U-09.Configure_permission_and_owner_etc_shadow.yml
+- import_tasks: B/U-10.Configure_permission_and_owner_etc_hosts.yml
+- import_tasks: B/U-11.Configure_permission_and_owner_xinetd_conf.yml
+- import_tasks: B/U-12/U-12.Configure_permission_and_owner_rsyslog_conf.yml
+
+# C.
+- import_tasks: C/U-19_cron_file_owner_and_permissions_set.yml
+- import_tasks: C/U-20_Finger_Service_Disable.yml
+- import_tasks: C/U-21_Anonymous_FTP_disable.yml
+- import_tasks: C/U-22_r_series_service_disable.yml
+  #- import_tasks: C/U-23_DoS attack_vulnerable_service_disable.yml
+- import_tasks: C/U-24_NFS_service_disable.yml
+- import_tasks: C/U-26_automountd_remove.yml

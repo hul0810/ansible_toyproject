@@ -1,0 +1,3 @@
+- import_tasks: profile.yml
+  vars:
+    profile_path: /etc/profile

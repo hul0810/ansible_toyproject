@@ -1,0 +1,23 @@
+- name: U-11. check permission and owner /etc/(x)inetd.conf
+  stat:
+    path: /etc/xinetd.conf
+  register: stat
+
+- name: U-11. change permission and owner /etc/(x)inetd.conf
+  block:
+  - name: change permission and owner /etc/(x)inetd.conf if file exists
+    file:
+      path: /etc/xinetd.conf
+      owner: root
+      group: root
+      mode: '0644'
+    when: stat.stat.pw_name != 'root' or stat.stat.gr_name != 'root' or stat.stat.mode | int > 644
+    register: file
+  - debug:
+      var: file.diff | default('No changes')
+
+  rescue:
+  - name: U-11. if file not exists
+    debug:
+      msg: "file no exists"
+    when: stat.stat.exists == false

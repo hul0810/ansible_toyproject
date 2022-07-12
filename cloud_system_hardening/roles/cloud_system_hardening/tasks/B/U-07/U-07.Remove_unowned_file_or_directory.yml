@@ -1,0 +1,7 @@
+- include_tasks: unowned.yml
+  vars:
+    path: /etc
+
+- include_tasks: unowned.yml
+  vars:
+    path: /tmp

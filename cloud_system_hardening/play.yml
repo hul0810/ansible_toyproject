@@ -1,0 +1,8 @@
+---
+- name: Cloud Vulnerability Check Guide - Security Settings(CCE) by KISA
+  hosts: all
+  gather_facts: yes
+  become: yes
+
+  roles:
+  - {role: cloud_system_apply_hardening}
